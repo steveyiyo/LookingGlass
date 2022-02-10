@@ -62,9 +62,11 @@ func AddPoP(c *gin.Context) {
 		if err != nil {
 			fmt.Println("json err:", err)
 		}
-		fmt.Println(string(b))
-
-		c.String(200, "Success")
+		if SaveJsonFile(string(b)) {
+			c.String(200, "Success")
+		} else {
+			c.String(400, "Fail")
+		}
 	} else {
 		c.String(401, "Unauthorized")
 	}
