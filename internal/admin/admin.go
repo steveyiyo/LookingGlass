@@ -3,6 +3,7 @@ package admin
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -45,8 +46,21 @@ func AddPoP(c *gin.Context) {
 
 		// TODO: Save PoP Information
 		if Authentication(Authorized_Key) {
+			jsonFile, err := os.Open("pop_info.json")
+
+			// if we os.Open returns an error then handle it
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			// defer the closing of our jsonFile so that we can parse it later on
+			defer jsonFile.Close()
+
+			byteValue, _ := ioutil.ReadAll(jsonFile)
 
 			var j PoP_Json
+
+			json.Unmarshal([]byte(byteValue), &j)
 
 			// Add PoP List
 			j.POP_List = append(j.POP_List, List{PoP, uuid.String()})
