@@ -10,10 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
-	"github.com/tidwall/sjson"
 )
-
-const Init_Json = `{"POP_List":[],"POP_Info":[]}`
 
 func AddPoP(c *gin.Context) {
 	// TODO: Add PoP
@@ -50,8 +47,6 @@ func AddPoP(c *gin.Context) {
 
 		// Add PoP List
 		j.POP_List = append(j.POP_List, List{PoP, uuid.String()})
-		sjson.Set(Init_Json, "POP_List.POP_Name", PoP)
-		sjson.Set(Init_Json, "POP_List.uuid", uuid)
 
 		// Add PoP Infomotion
 		j.POP_Info = append(j.POP_Info, Info{uuid: uuid.String(), mgmt_IP: Router_IP, Add_Time: int(time.Now().Unix()), status: true})
