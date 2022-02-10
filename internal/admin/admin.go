@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"time"
 
@@ -14,56 +15,61 @@ import (
 
 func AddPoP(c *gin.Context) {
 	// TODO: Add PoP
-	Authodized_Key := c.PostForm("Authorized_Key")
+	Authorized_Key := c.PostForm("Authorized_Key")
 	PoP := c.PostForm("PoP")
 	Router_IP := c.PostForm("MGMT_IP")
 
-	uuid, err := uuid.NewUUID()
-	if err != nil {
-		fmt.Printf("%v\n", err)
-	}
+	if CheckIPValid(Router_IP) {
 
-	// Defind Json Type
-	type List struct {
-		POP_Name string
-		uuid     string
-	}
-	type Info struct {
-		uuid     string
-		mgmt_IP  string
-		Add_Time int
-		status   bool
-	}
-
-	type PoP_Json struct {
-		POP_List []List
-		POP_Info []Info
-	}
-
-	// TODO: Save PoP Information
-	if Authentication(Authodized_Key) {
-
-		var j PoP_Json
-
-		// Add PoP List
-		j.POP_List = append(j.POP_List, List{PoP, uuid.String()})
-
-		// Add PoP Infomotion
-		j.POP_Info = append(j.POP_Info, Info{uuid: uuid.String(), mgmt_IP: Router_IP, Add_Time: int(time.Now().Unix()), status: true})
-
-		// Save to Json File
-		b, err := json.Marshal(j)
-
+		uuid, err := uuid.NewUUID()
 		if err != nil {
-			fmt.Println("json err:", err)
+			fmt.Printf("%v\n", err)
 		}
-		if SaveJsonFile(string(b)) {
-			c.String(200, "Success")
+
+		// Defind Json Type
+		type List struct {
+			POP_Name string
+			UUID     string
+		}
+		type Info struct {
+			UUID     string
+			MGMT_IP  string
+			Add_Time int
+			Status   bool
+		}
+
+		type PoP_Json struct {
+			POP_List []List
+			POP_Info []Info
+		}
+
+		// TODO: Save PoP Information
+		if Authentication(Authorized_Key) {
+
+			var j PoP_Json
+
+			// Add PoP List
+			j.POP_List = append(j.POP_List, List{PoP, uuid.String()})
+
+			// Add PoP Infomotion
+			j.POP_Info = append(j.POP_Info, Info{UUID: uuid.String(), MGMT_IP: Router_IP, Add_Time: int(time.Now().Unix()), Status: true})
+
+			// Save to Json File
+			b, err := json.Marshal(j)
+
+			if err != nil {
+				fmt.Println("json err:", err)
+			}
+			if SaveJsonFile(string(b)) {
+				c.String(200, "Success")
+			} else {
+				c.String(400, "Fail")
+			}
 		} else {
-			c.String(400, "Fail")
+			c.String(401, "Unauthorized")
 		}
 	} else {
-		c.String(401, "Unauthorized")
+		c.String(400, "Invalid IP")
 	}
 }
 
@@ -79,17 +85,25 @@ func CheckPoPAvailability(PoP string) bool {
 	return false
 }
 
-func Authentication(Authodized_Key string) bool {
+func Authentication(Authorized_Key string) bool {
 	// Loading .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Check Authodized_Key
-	if Authodized_Key == os.Getenv("Authodized_Key") {
+	// Check Authorized_Key
+	if Authorized_Key == os.Getenv("Authorized_Key") {
 		return true
 	} else {
 		return false
+	}
+}
+
+func CheckIPValid(IP string) bool {
+	if net.ParseIP(IP) == nil {
+		return false
+	} else {
+		return true
 	}
 }

@@ -8,8 +8,8 @@ import (
 
 func pageNotAvailable(c *gin.Context) {
 	type notFound struct {
-		status  bool
-		message string
+		Status  bool
+		Message string
 	}
 	var notFoundObj notFound
 	notFoundObj = notFound{false, "Page not found"}
@@ -27,7 +27,7 @@ func main() {
 	}
 	apiv1admin := r.Group("/api/v1/admin")
 	{
-		apiv1admin.POST("/api/v1/admin/AddPoP/", admin.AddPoP)
+		apiv1admin.POST("/AddPoP/", admin.AddPoP)
 	}
 	r.NoRoute(pageNotAvailable)
 
