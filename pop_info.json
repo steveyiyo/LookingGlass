@@ -1,1 +1,1 @@
-{ "POP_List": [{ "POP_Name": "US", "UUID": "3fd7b7f4-8a96-11ec-b506-acde48001122" }], "POP_Info": [{ "UUID": "3fd7b7f4-8a96-11ec-b506-acde48001122", "MGMT_IP": "1.1.1.1", "Add_Time": 1644513846, "Status": true }] }
+{"POP_List":[{"POP_Name":"JP","UUID":"d8d1e9b8-8e5e-11ec-adc3-2af8bc608440"}],"POP_Info":[{"UUID":"d8d1e9b8-8e5e-11ec-adc3-2af8bc608440","MGMT_IP":"4.4.4.4","Add_Time":1644929855,"Status":true}]}

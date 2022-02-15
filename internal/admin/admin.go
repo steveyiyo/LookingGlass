@@ -32,6 +32,7 @@ func AddPoP(c *gin.Context) {
 			POP_Name string
 			UUID     string
 		}
+
 		type Info struct {
 			UUID     string
 			MGMT_IP  string
@@ -39,7 +40,7 @@ func AddPoP(c *gin.Context) {
 			Status   bool
 		}
 
-		type PoP_Json struct {
+		type POP_JSON struct {
 			POP_List []List
 			POP_Info []Info
 		}
@@ -58,7 +59,7 @@ func AddPoP(c *gin.Context) {
 
 			byteValue, _ := ioutil.ReadAll(jsonFile)
 
-			var j PoP_Json
+			var j POP_JSON
 
 			json.Unmarshal([]byte(byteValue), &j)
 
