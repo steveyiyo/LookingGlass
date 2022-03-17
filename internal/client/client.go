@@ -6,9 +6,14 @@ import (
 	"io/ioutil"
 	"net"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+type Message struct {
+	Message string
+}
 
 func MTR(c *gin.Context) {
 	PoP := c.PostForm("PoP")
@@ -18,10 +23,12 @@ func MTR(c *gin.Context) {
 	var result string
 	if CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
-		c.String(200, result)
+		return_date := Message{result}
+		c.JSON(200, return_date)
 	} else {
 		result = "Invalid IP"
-		c.String(400, result)
+		return_date := Message{result}
+		c.JSON(400, return_date)
 	}
 }
 
@@ -33,10 +40,12 @@ func Ping(c *gin.Context) {
 	var result string
 	if CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
-		c.String(200, result)
+		return_date := Message{result}
+		c.JSON(200, return_date)
 	} else {
 		result = "Invalid IP"
-		c.String(400, result)
+		return_date := Message{result}
+		c.JSON(400, return_date)
 	}
 }
 
@@ -48,10 +57,12 @@ func Route(c *gin.Context) {
 	var result string
 	if CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
-		c.String(200, result)
+		return_date := Message{result}
+		c.JSON(200, return_date)
 	} else {
 		result = "Invalid IP"
-		c.String(400, result)
+		return_date := Message{result}
+		c.JSON(400, return_date)
 	}
 }
 
@@ -106,17 +117,33 @@ func AssignedtoPoP(action string, PoP string, IP string) string {
 
 	// Check if PoP is found
 	if MGMT_IP != "" {
-		// Send TCP Request to PoP (with Action)
-		conn, err := net.Dial("tcp", MGMT_IP+":17286")
-		if err != nil {
-			fmt.Println(err)
+		// Check if PoP is online
+		if TCPCheck(MGMT_IP) {
+			// Send TCP Request to PoP (with Action)
+			conn, err := net.Dial("tcp", MGMT_IP+":17286")
+			if err != nil {
+				fmt.Println(err)
+			}
+			defer conn.Close()
+			conn.Write([]byte(action + " " + IP))
+			message, _ := ioutil.ReadAll(conn)
+			return string(message)
+		} else {
+			return "PoP is offline"
 		}
-		defer conn.Close()
-		conn.Write([]byte(action + " " + IP))
-		message, _ := ioutil.ReadAll(conn)
-		return string(message)
 	} else {
 		return "PoP not found"
+	}
+}
+
+func TCPCheck(IP string) bool {
+	d := net.Dialer{Timeout: 8 * time.Second}
+	_, err := d.Dial("tcp", IP+":17286")
+	if err != nil {
+		fmt.Println(err)
+		return false
+	} else {
+		return true
 	}
 }
 

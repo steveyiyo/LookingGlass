@@ -20,6 +20,10 @@ func AddPoP(c *gin.Context) {
 	PoP := c.PostForm("PoP")
 	Router_IP := c.PostForm("MGMT_IP")
 
+	type Message struct {
+		Message string
+	}
+
 	if CheckIPValid(Router_IP) {
 
 		uuid, err := uuid.NewUUID()
@@ -73,18 +77,22 @@ func AddPoP(c *gin.Context) {
 			b, err := json.Marshal(j)
 
 			if err != nil {
-				fmt.Println("json err:", err)
+				log.Println("json err:", err)
 			}
 			if SaveJsonFile(string(b)) {
-				c.String(200, "Success")
+				return_data := Message{Message: "Success"}
+				c.JSON(200, return_data)
 			} else {
-				c.String(400, "Fail")
+				return_data := Message{Message: "Fail"}
+				c.JSON(400, return_data)
 			}
 		} else {
-			c.String(401, "Unauthorized")
+			return_data := Message{Message: "Unauthorized"}
+			c.JSON(401, return_data)
 		}
 	} else {
-		c.String(400, "Invalid IP")
+		return_data := Message{Message: "Failed"}
+		c.JSON(400, return_data)
 	}
 }
 
