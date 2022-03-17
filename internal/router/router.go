@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -31,7 +30,6 @@ func HTTPServer(w http.ResponseWriter, r *http.Request) {
 			IP = "NULL"
 		} else {
 			export := "IP Address: '" + IP + "' - Valid \n"
-			fmt.Printf(export)
 			io.WriteString(w, export)
 
 			if Action == "ping" {
@@ -56,58 +54,46 @@ func HTTPServer(w http.ResponseWriter, r *http.Request) {
 }
 
 func ping(IP string) string {
-	fmt.Print("Running ping...\n")
-
 	c := "ping -O -c 5 " + IP
 	cmd := exec.Command("bash", "-c", c)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "An error occurred"
 	}
-	fmt.Println(string(out))
 	return string(out)
 }
 
 func mtr(IP string) string {
-	fmt.Print("Running mtr...\n")
-
 	c := "mtr -G 2 -c 5 -erwbz " + IP
 	cmd := exec.Command("bash", "-c", c)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "An error occurred"
 	}
-	fmt.Println(string(out))
 	return string(out)
 }
 
 func routev4(IP string) string {
-	fmt.Print("Checking BGP Route...\n")
-
 	c := "vtysh -c 'show ip bgp " + IP + "'"
 	cmd := exec.Command("bash", "-c", c)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "An error occurred"
 	}
-	fmt.Println(string(out))
 	return string(out)
 }
 
 func routev6(IP string) string {
-	fmt.Print("Checking BGP Route...\n")
-
 	c := "vtysh -c 'show bgp " + IP + "'"
 	cmd := exec.Command("bash", "-c", c)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "An error occurred"
 	}
-	fmt.Println(string(out))
 	return string(out)
 }
 
