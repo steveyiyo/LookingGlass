@@ -42,14 +42,15 @@ func HTTPServer(w http.ResponseWriter, r *http.Request) {
 			}
 			if Action == "routev4" {
 				io.WriteString(w, "Checking BGP Route...\n\n")
-				io.WriteString(w, routev4(IP))
+				io.WriteString(w, return_not_support())
+				// io.WriteString(w, routev4(IP))
 			}
 			if Action == "routev6" {
 				io.WriteString(w, "Checking BGP Route...\n\n")
-				io.WriteString(w, routev6(IP))
+				io.WriteString(w, return_not_support())
+				// io.WriteString(w, routev6(IP))
 			}
 		}
-
 	}
 }
 
@@ -95,6 +96,10 @@ func routev6(IP string) string {
 		return "An error occurred"
 	}
 	return string(out)
+}
+
+func return_not_support() string {
+	return "Not support"
 }
 
 func CreateConnection() {

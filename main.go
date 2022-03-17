@@ -1,9 +1,12 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/steveyiyo/LookingGlass/internal/admin"
 	"github.com/steveyiyo/LookingGlass/internal/client"
+	"github.com/steveyiyo/LookingGlass/internal/router"
 )
 
 func pageNotAvailable(c *gin.Context) {
@@ -16,7 +19,7 @@ func pageNotAvailable(c *gin.Context) {
 	c.JSON(404, notFoundObj)
 }
 
-func main() {
+func Server() {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 	apiv1 := r.Group("/api/v1")
@@ -32,5 +35,15 @@ func main() {
 	r.NoRoute(pageNotAvailable)
 
 	r.Run("127.0.0.1:32280")
+}
 
+func main() {
+	service := os.Args[1]
+
+	switch service {
+	case "server":
+		Server()
+	case "router":
+		router.CreateConnection()
+	}
 }

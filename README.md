@@ -1,3 +1,9 @@
+## How to start?
+
+Download the release version.
+
+./name {server, router}
+
 ## API EndPoint
 
 POST    /api/v1/mtr/  
@@ -16,7 +22,7 @@ POST /api/v1/admin/AddPoP/
 ```
 {
     "Authorized_Key": "",   # Which you write in .env file.
-    "PoP": "",             # The POP Name that you want to name.
+    "PoP": "",              # The POP Name that you want to name.
     "MGMT_IP": ""           # The IP address of the POP.
 }
 ```
