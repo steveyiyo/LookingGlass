@@ -2,7 +2,9 @@
 
 Download the release version.
 
+```
 ./name {server, router}
+```
 
 ## API EndPoint
 
