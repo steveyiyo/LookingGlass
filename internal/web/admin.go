@@ -1,4 +1,4 @@
-package admin
+package web
 
 import (
 	"encoding/json"
@@ -12,7 +12,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
+	"github.com/steveyiyo/LookingGlass/pkg/tools"
 )
+
+func TestPING(c *gin.Context) {
+	targetIP := c.PostForm("target")
+
+	if CheckIPValid(targetIP) {
+		result := tools.Real_ping(targetIP)
+		c.String(200, result)
+	} else {
+		c.String(400, "Failed")
+	}
+
+}
 
 func AddPoP(c *gin.Context) {
 	// TODO: Add PoP

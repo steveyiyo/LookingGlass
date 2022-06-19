@@ -4,9 +4,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/steveyiyo/LookingGlass/internal/admin"
 	"github.com/steveyiyo/LookingGlass/internal/client"
 	"github.com/steveyiyo/LookingGlass/internal/router"
+	"github.com/steveyiyo/LookingGlass/internal/web"
 )
 
 func pageNotAvailable(c *gin.Context) {
@@ -27,10 +27,11 @@ func Server() {
 		apiv1.POST("/mtr/", client.MTR)
 		apiv1.POST("/ping/", client.Ping)
 		apiv1.POST("/bgp_route/", client.Route)
+		apiv1.POST("/TestPING/", web.TestPING)
 	}
 	apiv1admin := r.Group("/api/v1/admin")
 	{
-		apiv1admin.POST("/AddPoP/", admin.AddPoP)
+		apiv1admin.POST("/AddPoP/", web.AddPoP)
 	}
 	r.NoRoute(pageNotAvailable)
 
