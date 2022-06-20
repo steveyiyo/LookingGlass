@@ -2,6 +2,7 @@ package tools
 
 import (
 	"fmt"
+	"net"
 
 	"github.com/go-ping/ping"
 )
@@ -59,17 +60,10 @@ func Real_ping(target string) string {
 	return resultString
 }
 
-func t_ping(target string) *ping.Statistics {
-	pinger, err := ping.NewPinger(target)
-	if err != nil {
-		panic(err)
+func CheckIPValid(IP string) bool {
+	if net.ParseIP(IP) == nil {
+		return false
+	} else {
+		return true
 	}
-	pinger.Count = 5
-	err = pinger.Run() // Blocks until finished.
-	if err != nil {
-		panic(err)
-	}
-	stats := pinger.Statistics() // get send/receive/duplicate/rtt stats
-
-	return stats
 }

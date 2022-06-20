@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"fmt"
 	"log"
 	"testing"
 )
@@ -9,10 +8,8 @@ import (
 func TestMain(m *testing.M) {
 
 	log.Println("=== Start run ping ===")
-	result := (t_ping("1.1.1.1"))
 	go Real_ping("8.8.8.8")
 	Real_ping("1.1.1.1")
-	fmt.Println(result.AvgRtt)
 	log.Println("==================")
 }
 

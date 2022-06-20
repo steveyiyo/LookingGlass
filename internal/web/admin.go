@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net"
 	"os"
 	"time"
 
@@ -18,7 +17,7 @@ import (
 func TestPING(c *gin.Context) {
 	targetIP := c.PostForm("target")
 
-	if CheckIPValid(targetIP) {
+	if tools.CheckIPValid(targetIP) {
 		result := tools.Real_ping(targetIP)
 		c.String(200, result)
 	} else {
@@ -37,7 +36,7 @@ func AddPoP(c *gin.Context) {
 		Message string
 	}
 
-	if CheckIPValid(Router_IP) {
+	if tools.CheckIPValid(Router_IP) {
 
 		uuid, err := uuid.NewUUID()
 		if err != nil {
@@ -133,13 +132,5 @@ func Authentication(Authorized_Key string) bool {
 		return true
 	} else {
 		return false
-	}
-}
-
-func CheckIPValid(IP string) bool {
-	if net.ParseIP(IP) == nil {
-		return false
-	} else {
-		return true
 	}
 }

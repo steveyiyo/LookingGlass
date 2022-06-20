@@ -1,4 +1,4 @@
-package client
+package web
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/steveyiyo/LookingGlass/pkg/tools"
 )
 
 type Message struct {
@@ -21,7 +22,7 @@ func MTR(c *gin.Context) {
 	Action := "mtr"
 
 	var result string
-	if CheckIPValid(IP) {
+	if tools.CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
 		return_date := Message{result}
 		c.JSON(200, return_date)
@@ -38,7 +39,7 @@ func Ping(c *gin.Context) {
 	Action := "ping"
 
 	var result string
-	if CheckIPValid(IP) {
+	if tools.CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
 		return_date := Message{result}
 		c.JSON(200, return_date)
@@ -55,7 +56,7 @@ func Route(c *gin.Context) {
 	Action := "route"
 
 	var result string
-	if CheckIPValid(IP) {
+	if tools.CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
 		return_date := Message{result}
 		c.JSON(200, return_date)
@@ -141,14 +142,6 @@ func TCPCheck(IP string) bool {
 	_, err := d.Dial("tcp", IP+":17286")
 	if err != nil {
 		fmt.Println(err)
-		return false
-	} else {
-		return true
-	}
-}
-
-func CheckIPValid(IP string) bool {
-	if net.ParseIP(IP) == nil {
 		return false
 	} else {
 		return true
