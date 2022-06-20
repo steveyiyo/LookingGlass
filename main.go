@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -39,12 +40,18 @@ func Server() {
 }
 
 func main() {
-	service := os.Args[1]
+	if len(os.Args) > 1 {
+		service := os.Args[1]
 
-	switch service {
-	case "server":
-		Server()
-	case "router":
-		router.CreateConnection()
+		switch service {
+		case "server":
+			Server()
+		case "router":
+			router.CreateConnection()
+		default:
+			log.Println("Please specify a service or client to run.")
+		}
+	} else {
+		log.Println("Please specify a service or client to run.")
 	}
 }
