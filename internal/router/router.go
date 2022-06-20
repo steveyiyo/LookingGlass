@@ -1,111 +1,78 @@
 package router
 
 import (
-	"io"
+	"fmt"
 	"log"
-	"net"
-	"net/http"
-	"os/exec"
+
+	"github.com/gin-gonic/gin"
+	"github.com/steveyiyo/LookingGlass/pkg/tools"
 )
 
-func HTTPServer(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	r.ParseForm()
+const webServerPort = "59276"
 
-	if r.Method == "POST" {
-		Action := "NULL"
-		IP := "NULL"
-		for key, values := range r.Form {
-			if key == "Action" {
-				Action = values[0]
-			}
-			if key == "IP" {
-				IP = values[0]
-			}
-		}
+func agent(c *gin.Context) {
+	action := c.PostForm("action")
+	target := c.PostForm("target")
 
-		if net.ParseIP(IP) == nil {
-			export := "IP Address: '" + IP + "' - Invalid \n"
-			io.WriteString(w, export)
-			IP = "NULL"
-		} else {
-			export := "IP Address: '" + IP + "' - Valid \n"
-			io.WriteString(w, export)
+	if !tools.CheckIPValid(target) {
+		c.String(400, "Invalid IP")
+	}
 
-			if Action == "ping" {
-				io.WriteString(w, "Running ping...\n\n")
-				io.WriteString(w, ping(IP))
-			}
-			if Action == "mtr" {
-				io.WriteString(w, "Running mtr...\n\n")
-				io.WriteString(w, mtr(IP))
-			}
-			if Action == "routev4" {
-				io.WriteString(w, "Checking BGP Route...\n\n")
-				io.WriteString(w, return_not_support())
-				// io.WriteString(w, routev4(IP))
-			}
-			if Action == "routev6" {
-				io.WriteString(w, "Checking BGP Route...\n\n")
-				io.WriteString(w, return_not_support())
-				// io.WriteString(w, routev6(IP))
-			}
-		}
+	switch action {
+	case "ping":
+		c.String(200, tools.Real_ping(target))
+	case "mtr":
+		c.String(404, "Not supported")
+	case "routev4":
+		c.String(404, "Not supported")
+	case "routev6":
+		c.String(404, "Not supported")
+	default:
+		c.String(400, "Invalid action")
 	}
 }
 
-func ping(IP string) string {
-	c := "ping -O -c 5 " + IP
-	cmd := exec.Command("bash", "-c", c)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		log.Println(err)
-		return "An error occurred"
-	}
-	return string(out)
+func WebServer() {
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
+	r.Use(gin.Logger(), gin.Recovery())
+
+	r.POST("/agent", agent)
+	r.NoRoute(pageNotAvailable)
+
+	ListenAddress := fmt.Sprintf("0.0.0.0:%s", webServerPort)
+	log.Println("Starting web server on", ListenAddress)
+	r.Run(ListenAddress)
 }
 
-func mtr(IP string) string {
-	c := "mtr -G 2 -c 5 -erwbz " + IP
-	cmd := exec.Command("bash", "-c", c)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		log.Println(err)
-		return "An error occurred"
+func pageNotAvailable(c *gin.Context) {
+	type notFound struct {
+		Status  bool
+		Message string
 	}
-	return string(out)
+	var notFoundObj notFound
+	notFoundObj = notFound{false, "Not supported."}
+	c.JSON(404, notFoundObj)
 }
 
-func routev4(IP string) string {
-	c := "vtysh -c 'show ip bgp " + IP + "'"
-	cmd := exec.Command("bash", "-c", c)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		log.Println(err)
-		return "An error occurred"
-	}
-	return string(out)
-}
+// func routev4(IP string) string {
+// 	c := "vtysh -c 'show ip bgp " + IP + "'"
+// 	cmd := exec.Command("bash", "-c", c)
+// 	out, err := cmd.CombinedOutput()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return "An error occurred"
+// 	}
+// 	return string(out)
+// }
 
-func routev6(IP string) string {
-	c := "vtysh -c 'show bgp " + IP + "'"
-	cmd := exec.Command("bash", "-c", c)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		log.Println(err)
-		return "An error occurred"
-	}
-	return string(out)
-}
-
-func return_not_support() string {
-	return "Not support"
-}
-
-func CreateConnection() {
-	http.HandleFunc("/", HTTPServer)
-	err := http.ListenAndServe(":17286", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
-}
+// func routev6(IP string) string {
+// 	c := "vtysh -c 'show bgp " + IP + "'"
+// 	cmd := exec.Command("bash", "-c", c)
+// 	out, err := cmd.CombinedOutput()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return "An error occurred"
+// 	}
+// 	return string(out)
+// }

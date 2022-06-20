@@ -24,7 +24,7 @@ func main() {
 		case "server":
 			web.WebServer(webServerPort)
 		case "router":
-			router.CreateConnection()
+			router.WebServer()
 		default:
 			log.Println("Please specify a service or client to run.")
 		}

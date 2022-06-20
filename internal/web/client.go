@@ -24,12 +24,12 @@ func MTR(c *gin.Context) {
 	var result string
 	if tools.CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
-		return_date := Message{result}
-		c.JSON(200, return_date)
+		resultData := Message{result}
+		c.JSON(200, resultData)
 	} else {
 		result = "Invalid IP"
-		return_date := Message{result}
-		c.JSON(400, return_date)
+		resultData := Message{result}
+		c.JSON(400, resultData)
 	}
 }
 
@@ -41,12 +41,12 @@ func Ping(c *gin.Context) {
 	var result string
 	if tools.CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
-		return_date := Message{result}
-		c.JSON(200, return_date)
+		resultData := Message{result}
+		c.JSON(200, resultData)
 	} else {
 		result = "Invalid IP"
-		return_date := Message{result}
-		c.JSON(400, return_date)
+		resultData := Message{result}
+		c.JSON(400, resultData)
 	}
 }
 
@@ -58,12 +58,12 @@ func Route(c *gin.Context) {
 	var result string
 	if tools.CheckIPValid(IP) {
 		result = AssignedtoPoP(Action, PoP, IP)
-		return_date := Message{result}
-		c.JSON(200, return_date)
+		resultData := Message{result}
+		c.JSON(200, resultData)
 	} else {
 		result = "Invalid IP"
-		return_date := Message{result}
-		c.JSON(400, return_date)
+		resultData := Message{result}
+		c.JSON(400, resultData)
 	}
 }
 
