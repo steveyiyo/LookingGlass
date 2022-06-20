@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/steveyiyo/LookingGlass/internal/router"
+	"github.com/steveyiyo/LookingGlass/internal/agent"
 	"github.com/steveyiyo/LookingGlass/internal/web"
 )
 
@@ -23,8 +23,8 @@ func main() {
 		switch service {
 		case "server":
 			web.WebServer(webServerPort)
-		case "router":
-			router.WebServer()
+		case "agent":
+			agent.WebServer()
 		default:
 			log.Println("Please specify a service or client to run.")
 		}

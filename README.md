@@ -3,7 +3,7 @@
 Download the release version.
 
 ```
-./name {server, router}
+./LookingGlass {server, agent}
 ```
 
 ## API EndPoint
