@@ -24,7 +24,7 @@ func main() {
 		case "server":
 			web.WebServer(webServerPort)
 		case "agent":
-			agent.WebServer()
+			agent.Init()
 		default:
 			log.Println("Please specify a service or client to run.")
 		}

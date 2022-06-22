@@ -7,6 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Message struct {
+	Message string
+}
+
 func WebServer(webServerPort string) {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
@@ -21,6 +25,7 @@ func WebServer(webServerPort string) {
 
 		apiv1admin := apiv1.Group("/admin")
 		{
+			apiv1admin.GET("/AgentJoin/", AgentJoin)
 			apiv1admin.POST("/AddPoP/", AddPoP)
 		}
 	}

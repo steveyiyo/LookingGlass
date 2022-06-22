@@ -10,6 +10,16 @@ import (
 
 const webServerPort = "59276"
 
+func Init() {
+	// Read Config file
+	// If not, create one
+
+	// Ask Server Join Key
+	// e.g. http://localhost:59276/api/v1/admin/AgentJoin?key={{.generate}}&id={{.uuid}}&popName={{.popName}}
+
+	WebServer()
+}
+
 func agent(c *gin.Context) {
 	action := c.PostForm("action")
 	target := c.PostForm("target")
@@ -50,8 +60,7 @@ func pageNotAvailable(c *gin.Context) {
 		Status  bool
 		Message string
 	}
-	var notFoundObj notFound
-	notFoundObj = notFound{false, "Not supported."}
+	notFoundObj := notFound{false, "Not supported."}
 	c.JSON(404, notFoundObj)
 }
 

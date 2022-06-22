@@ -12,10 +12,6 @@ import (
 	"github.com/steveyiyo/LookingGlass/pkg/tools"
 )
 
-type Message struct {
-	Message string
-}
-
 func MTR(c *gin.Context) {
 	PoP := c.PostForm("PoP")
 	IP := c.PostForm("Dst_IP")
