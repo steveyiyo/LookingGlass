@@ -15,6 +15,11 @@
 - Server Authorized Key
 - POP Name
 
+Agent 啟動後，會先跟 Server 傳送驗證資訊
+```
+{ "ACTION": "register", "AUTHORIZED_KEY": "authorized", "POP_NAME": "TPE" }
+```
+
 ## Server
 
 需要設定以下資訊，如果沒有指定將會自動產生。
