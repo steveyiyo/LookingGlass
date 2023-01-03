@@ -11,7 +11,7 @@ import (
 
 func main() {
 	godotenv.Load()
-	webServerPort := os.Getenv("WebServerPort")
+	webServerPort := os.Getenv("LISTEN_PORT")
 
 	if webServerPort == "" {
 		log.Fatal("WebServerPort is not set")
@@ -26,9 +26,9 @@ func main() {
 		case "agent":
 			agent.Init()
 		default:
-			log.Println("Please specify a service or client to run.")
+			log.Fatal("Please specify a service or client to run.")
 		}
 	} else {
-		log.Println("Please specify a service or client to run.")
+		log.Fatal("Please specify a service or client to run.")
 	}
 }
