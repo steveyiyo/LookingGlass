@@ -1,4 +1,4 @@
-## Looking Glass
+# Looking Glass
 
 [English](README.md)
 
