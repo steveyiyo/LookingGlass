@@ -1,12 +1,25 @@
-## How to start?
+## Looking Glass
 
-[正體中文文件](README_zh.md)
+[English](README.md)
 
-Download the release version.
+請至 [Releases](https://github.com/steveyiyo/LookingGlass/releases) 下載對應的二進制文件。
 
 ```
 ./LookingGlass {server, agent}
 ```
+
+## Agent
+
+需要設定以下資訊，在 Agent 啟動後會與 Server 自動建立 Socket 連線。
+- Server EndPoint
+- Server Authorized Key
+- POP Name
+
+## Server
+
+需要設定以下資訊，如果沒有指定將會自動產生。
+- Listen Port
+- Authorized Key
 
 ## API EndPoint
 
