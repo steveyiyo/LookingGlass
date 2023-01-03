@@ -33,7 +33,16 @@ func SocketServer() {
 
 func handleConn(conn net.Conn) {
 
-	defer conn.Close()
+	registerStatus := false
+	popName := ""
+	defer func() {
+		log.Println("Server: Connection closed.")
+		if registerStatus {
+			removePOP(popName)
+			log.Printf("We've remove %s from POP list.", popName)
+		}
+		conn.Close()
+	}()
 
 	bytes := make([]byte, 1024)
 	for {
@@ -51,11 +60,17 @@ func handleConn(conn net.Conn) {
 		}
 
 		action := fastjson.GetString(bytes[:n], "ACTION")
+		if action == "" {
+			log.Printf("Client-`%s`: Invalid Action", conn.RemoteAddr().String())
+			conn.Close()
+			return
+		}
+
 		log.Println(action)
 		switch action {
 		case "register":
 			// Check Auth Token
-			checkAuth := checkAuthToken(fastjson.GetString(bytes[:n], "AUTH"))
+			checkAuth := checkAuthToken(fastjson.GetString(bytes[:n], "AUTHORIZED_KEY"))
 			if !checkAuth {
 				returnMessage := "Auth Token is invalid"
 				conn.Write([]byte(fmt.Sprintf("%s\n", returnMessage)))
@@ -66,13 +81,27 @@ func handleConn(conn net.Conn) {
 			log.Println("Auth Token is valid")
 
 			// Get POP Name
-			popName := fastjson.GetString(bytes[:n], "POP_NAME")
-			log.Printf("Register POP: %s", popName)
+			popName = fastjson.GetString(bytes[:n], "POP_NAME")
+			if popName == "" {
+				returnMessage := "POP Name is invalid"
+				conn.Write([]byte(fmt.Sprintf("%s\n", returnMessage)))
+				log.Println(returnMessage)
+				conn.Close()
+				return
+			}
 
-			// Save to Cache
-			// If match, then do mtr
+			// Save to List
+			if !addPOP(popName) {
+				return
+			}
 
-			returnMessage := "register"
+			registerStatus = true
+			returnMessage := fmt.Sprintf("Register POP: %s, ACK!", popName)
+			conn.Write([]byte(fmt.Sprintf("%s\n", returnMessage)))
+			log.Println(returnMessage)
+
+		default:
+			returnMessage := "Invalid Action"
 			conn.Write([]byte(fmt.Sprintf("%s\n", returnMessage)))
 			log.Println(returnMessage)
 		}

@@ -15,7 +15,7 @@
 - Server Authorized Key
 - POP Name
 
-Agent 啟動後，會先跟 Server 傳送驗證資訊
+Agent 啟動後，會先跟 Server 傳送驗證資訊。
 ```
 { "ACTION": "register", "AUTHORIZED_KEY": "authorized", "POP_NAME": "TPE" }
 ```

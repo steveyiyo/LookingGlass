@@ -18,16 +18,10 @@ func WebServer(webServerPort string) {
 
 	apiv1 := r.Group("/api/v1")
 	{
+		apiv1.GET("/pop_list/", getPOP)
 		apiv1.POST("/mtr/", MTR)
 		apiv1.POST("/ping/", Ping)
 		apiv1.POST("/bgp_route/", Route)
-		apiv1.POST("/TestPING/", TestPING)
-
-		apiv1admin := apiv1.Group("/admin")
-		{
-			apiv1admin.GET("/AgentJoin/", AgentJoin)
-			apiv1admin.POST("/AddPoP/", AddPoP)
-		}
 	}
 	r.NoRoute(pageNotAvailable)
 
@@ -36,12 +30,19 @@ func WebServer(webServerPort string) {
 	r.Run(ListenAddress)
 }
 
+func getPOP(c *gin.Context) {
+	popData := getPOPList()
+	type POPList struct {
+		PoP []string
+	}
+	c.JSON(200, POPList{popData})
+}
+
 func pageNotAvailable(c *gin.Context) {
 	type notFound struct {
 		Status  bool
 		Message string
 	}
-	var notFoundObj notFound
-	notFoundObj = notFound{false, "Page not found"}
+	notFoundObj := notFound{false, "Page not found"}
 	c.JSON(404, notFoundObj)
 }

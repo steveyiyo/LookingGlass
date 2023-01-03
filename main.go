@@ -22,7 +22,8 @@ func main() {
 
 		switch service {
 		case "server":
-			web.WebServer(webServerPort)
+			go web.WebServer(webServerPort)
+			web.SocketServer()
 		case "agent":
 			agent.Init()
 		default:
