@@ -5,8 +5,8 @@ go 1.18
 require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-ping/ping v1.0.0
-	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
+	github.com/valyala/fastjson v1.6.4
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.6
 )
@@ -34,8 +34,8 @@ require (
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
-	golang.org/x/sys v0.0.0-20220317061510-51cd9980dadf // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/net v0.3.0 // indirect
+	golang.org/x/sys v0.3.0 // indirect
+	golang.org/x/text v0.5.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
